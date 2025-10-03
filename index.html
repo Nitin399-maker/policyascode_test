@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy as Code — Atomic Rules from Policy Documents</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTUiIGZpbGw9IiMyNTYzZWIiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJtMTYgNyAyIDcgNyAyLTcgMi0yIDctMi03LTctMiA3LTJaIi8+PC9zdmc+">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css" crossorigin="anonymous">
+  <style>
+    .narrative {
+      max-inline-size: 40rem;
+    }
+
+    .priority-high,
+    .edit-delete {
+      background-color: var(--bs-danger);
+      color: var(--bs-light);
+    }
+
+    .priority-medium {
+      background-color: var(--bs-warning);
+      color: var(--bs-dark);
+    }
+
+    .priority-low,
+    .edit-merge {
+      background-color: var(--bs-info);
+      color: var(--bs-dark);
+    }
+
+    .demo-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+  </style>
+</head>
+
+<body style="margin-bottom: 50vh">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href=".">Policy as Code</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="nav-item dropdown ms-auto" role="group" aria-label="Toggle dark mode" title="Toggle Dark Mode">
+          <button class="dark-theme-toggle btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Toggle theme (auto)">
+            <i class="bi bi-circle-half"></i> <span class="d-lg-none ms-2">Toggle theme</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><button class="dropdown-item" data-bs-theme-value="light"><i class="me-2 bi bi-sun-fill"></i> Light</button></li>
+            <li><button class="dropdown-item" data-bs-theme-value="dark"><i class="me-2 bi bi-moon-stars-fill"></i> Dark</button></li>
+            <li><button class="dropdown-item" data-bs-theme-value="auto"><i class="me-2 bi bi-circle-half"></i> Auto</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <h1 class="display-1 my-4 text-center">Policy as Code</h1>
+    <h2 class="display-6 text-center">Extract and consolidate atomic rules from policy documents</h2>
+    <div class="mx-auto my-3 narrative">
+      <p>Transform <em>complex policy documents</em> into <strong>clear, actionable rules</strong> automatically. This <strong>AI-powered tool</strong> breaks down lengthy policies into specific, <em>testable requirements</em> that teams can actually implement and follow.</p>
+      <p>Perfect for <strong>marketing teams</strong>, <strong>AI compliance</strong>, <strong>legal teams</strong>, and <strong>auditors</strong> who need to ensure <em>consistent policy enforcement</em> across organizations. Use it for employee handbooks, regulatory compliance, quality standards, or any governance documentation.</p>
+      <p>Simply <strong>upload</strong> your policy documents (.txt, .md, or .pdf), click <strong>"Ingest"</strong> to extract rules, then use <strong>"Consolidate"</strong> to remove duplicates. <em>Validate any document</em> against your extracted rules instantly. Everything runs <strong>securely in your browser</strong>.</p>
+    </div>
+
+    <div id="demo-cards" class="my-4"></div>
+  </div>
+
+  <div class="container">
+    <form id="policyascode-settings" class="narrative mx-auto">
+      <details class="my-4 card rounded-3 shadow-sm">
+        <summary class="h5 p-4 m-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873.873 0 0 1-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
+          </svg>
+          Advanced
+        </summary>
+        <div class="p-4 pt-0">
+          <div class="row g-3">
+            <div class="col-sm-3">
+              <label class="form-label">API Keys</label>
+              <button type="button" class="btn btn-outline-secondary d-block w-100" id="openai-config-btn">Config</button>
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label">Model</label>
+              <input id="model" type="text" class="form-control" value="gpt-4.1-mini" list="model-list">
+              <datalist id="model-list">
+                <option value="gpt-4.1-mini"></option>
+                <option value="gpt-4.1-nano"></option>
+                <option value="gpt-5-mini"></option>
+                <option value="gpt-5-nano"></option>
+              </datalist>
+            </div>
+            <div class="col-sm-3">
+              <label class="form-label">Storage</label>
+              <button type="button" class="btn btn-outline-danger d-block w-100" id="clear-storage-btn">Clear all</button>
+            </div>
+          <div class="row g-3 mt-3">
+            <div class="col-12">
+              <label class="form-label">Supabase Connection</label>
+              <div class="d-flex align-items-center gap-2">
+                <span id="supabase-status" class="badge bg-secondary">Not connected</span>
+                <button type="button" class="btn btn-outline-primary btn-sm" id="supabase-connect">Connect</button>
+                <button type="button" class="btn btn-outline-success btn-sm" id="supabase-signin" style="display: none;">Sign in with Google</button>
+                <button type="button" class="btn btn-outline-danger btn-sm" id="supabase-signout" style="display: none;">Sign out</button>
+                <span id="user-email" class="text-muted small"></span>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="mt-3 d-flex gap-2">
+          </div>
+          <div class="mt-4">
+            <label for="policyascode-extraction" class="form-label fw-bold">Extraction Prompt</label>
+            <textarea id="policyascode-extraction" class="form-control font-monospace" rows="6">Extract atomic, testable rules from ONE policy document.
+Keep each rule minimal.
+Write for an LLM to apply it unambiguously.
+Always include concise rationale and quotes.</textarea>
+          </div>
+          <div class="mt-3">
+            <label for="policyascode-consolidation" class="form-label fw-bold">Consolidation Prompt</label>
+            <textarea id="policyascode-consolidation" class="form-control font-monospace" rows="5">Suggest deletes and merges to remove duplicates and generalize rules where appropriate.</textarea>
+          </div>
+          <div class="mt-3">
+            <label for="policyascode-validation" class="form-label fw-bold">Validation Prompt</label>
+            <textarea id="policyascode-validation" class="form-control font-monospace" rows="6">Validate the provided document against each rule. For each rule, determine if the document passes, fails, or if it's unknown/unclear.
+
+Return a validation result for each rule with:
+- id: the rule identifier
+- result: "pass" if the document complies, "fail" if it violates the rule, "unknown" if unclear or not applicable
+- reason: brief explanation of why it passes, fails, or is unknown
+
+Be specific and cite relevant parts of the document in your reasoning.</textarea>
+          </div>
+        </div>
+      </details>
+
+      <div class="my-4" id="policies">
+        <div class="text-center mb-3">
+          <textarea id="url-input" class="form-control font-monospace" rows="3" placeholder="Policy document URLs (one per line)"></textarea>
+        </div>
+        <div class="d-flex flex-wrap gap-2 align-items-center justify-content-center">
+          <input id="file-input" class="form-control w-auto flex-grow-1" type="file" accept=".txt,.md,.pdf" multiple>
+          <button id="btn-ingest" class="btn btn-primary" type="button">Ingest</button>
+          <button id="btn-consolidate" class="btn btn-outline-secondary" type="button">Consolidate</button>
+        </div>
+      </div>
+
+    </form>
+
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header d-flex align-items-center gap-2">
+            <strong>Rules</strong>
+            <span id="rule-count" class="badge text-bg-info ms-auto">0</span>
+          </div>
+          <div id="rule-list" class="card-body" style="max-height: 80vh; overflow: auto;"></div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header d-flex align-items-center gap-2">
+            <strong>Rule Log</strong>
+          </div>
+          <div id="learning-list" class="card-body" style="max-height: 80vh; overflow: auto;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="container">
+    <div class="narrative mx-auto my-4">
+      <h4 class="text-center mb-3">Validate Documents</h4>
+      <p class="text-center text-muted small mb-4">Upload or specify documents to validate against the extracted rules</p>
+
+      <div id="validate">
+        <div class="text-center mb-3">
+          <textarea id="validate-url-input" class="form-control font-monospace" rows="3" placeholder="Document URLs to validate (one per line)"></textarea>
+        </div>
+        <div class="d-flex flex-wrap gap-2 align-items-center justify-content-center">
+          <input id="validate-file-input" class="form-control w-auto flex-grow-1" type="file" accept=".txt,.md,.pdf" multiple>
+          <button id="btn-validate" class="btn btn-success" type="button">Validate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="validations-table" class="container-fluid mt-4"></div>
+  <div class="container-fluid mt-2" id="validation-legend">
+    <div class="small text-muted">
+      <span class="badge text-bg-success me-1">pass</span> Compliant
+      <span class="badge text-bg-danger ms-3 me-1">fail</span> Violates rule
+      <span class="badge text-bg-secondary ms-3 me-1">n/a</span> Rule not applicable
+      <span class="badge text-bg-warning ms-3 me-1">unknown</span> Unsure; needs human review
+    </div>
+  </div>
+
+  <div id="modal-container"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" type="module"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@gramex/ui@0.3/dist/dark-theme.js" type="module"></script>
+  <script src="script.js" type="module"></script>
+</body>
+
+</html>
