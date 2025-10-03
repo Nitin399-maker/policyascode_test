@@ -42,12 +42,14 @@ async function saveRulesToSupabase(rules) {
     bootstrapAlert({title:"Network error", body: "Failed to connect to Supabase", color: "danger" });
   }
 }
-
 async function connectToSupabase(url = null, key = null) {
-  const SUPABASE_URL =prompt("Enter your Supabase URL:");
-  const SUPABASE_ANON_KEY = prompt("Enter your Supabase Anon Key:");
+  const SUPABASE_URL = url || localStorage.getItem('supabase_url') || prompt("Enter your Supabase URL:");
+  const SUPABASE_ANON_KEY = key || localStorage.getItem('supabase_key') || prompt("Enter your Supabase Anon Key:");
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return;
   try {
     supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    localStorage.setItem('supabase_url', SUPABASE_URL);
+    localStorage.setItem('supabase_key', SUPABASE_ANON_KEY);
     supabase.auth.onAuthStateChange((event, session) => {
       handleUserAuth(event === 'SIGNED_IN' ? session.user : null);
     });
@@ -519,7 +521,7 @@ $("#openai-config-btn").addEventListener("click", () => openaiConfig({ defaultBa
 $("#clear-storage-btn").addEventListener("click", () => {
   if (confirm("Are you sure you want to clear all rules? This action cannot be undone.")) clearState();
 });
-$("#supabase-connect").addEventListener("click", () => connectToSupabase());
+$("#supabase-connect").addEventListener("click", () => connectToSupabase('prompt', 'prompt'));
 $("#supabase-signin").addEventListener("click", () => handleGoogleAuth(true));
 $("#supabase-signout").addEventListener("click", () => handleGoogleAuth(false));
 
@@ -614,6 +616,7 @@ on(document, "click", ".demo-card", (e) => {
   }
 });
 
+connectToSupabase();
 // Load saved state on initialization
 loadState();
 redrawValidations();
